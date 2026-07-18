@@ -102,6 +102,12 @@ pub struct InvoiceBuilder<'invoice_builder> {
     included_supply_chain_trade_line_items: Vec<IncludedSupplyChainTradeLineItem<'invoice_builder>>,
 }
 
+impl<'invoice_builder> Default for InvoiceBuilder<'invoice_builder> {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl<'invoice_builder> InvoiceBuilder<'invoice_builder> {
     pub fn new() -> Self {
         Self {
@@ -257,11 +263,10 @@ impl<'invoice_builder> InvoiceBuilder<'invoice_builder> {
             }
         }
 
-        if specification_level >= SpecificationLevel::Basic {
-            if self.included_supply_chain_trade_line_items.is_empty() {
+        if specification_level >= SpecificationLevel::Basic
+            && self.included_supply_chain_trade_line_items.is_empty() {
                 error_text += "No included supply chain trade line items set\n";
             }
-        }
 
         if specification_level >= SpecificationLevel::Extended {
             if self.buyer_reference.is_none() {
@@ -565,9 +570,10 @@ impl<'invoice_builder> InvoiceBuilder<'invoice_builder> {
         if let Some(applicable_trade_tax) = self.applicable_trade_tax.as_mut() {
             applicable_trade_tax.calculated_amount = Some(amount);
         } else {
-            let mut new_struct = ApplicableTradeTax::default();
-            new_struct.calculated_amount = Some(amount);
-            self.applicable_trade_tax = Some(new_struct);
+            self.applicable_trade_tax = Some(ApplicableTradeTax {
+                calculated_amount: Some(amount),
+                ..Default::default()
+            });
         }
 
         self
@@ -579,9 +585,10 @@ impl<'invoice_builder> InvoiceBuilder<'invoice_builder> {
         if let Some(applicable_trade_tax) = self.applicable_trade_tax.as_mut() {
             applicable_trade_tax.basis_amount = Some(amount);
         } else {
-            let mut new_struct = ApplicableTradeTax::default();
-            new_struct.basis_amount = Some(amount);
-            self.applicable_trade_tax = Some(new_struct);
+            self.applicable_trade_tax = Some(ApplicableTradeTax {
+                basis_amount: Some(amount),
+                ..Default::default()
+            });
         }
 
         self
@@ -594,9 +601,10 @@ impl<'invoice_builder> InvoiceBuilder<'invoice_builder> {
         if let Some(applicable_trade_tax) = self.applicable_trade_tax.as_mut() {
             applicable_trade_tax.category_code = code;
         } else {
-            let mut new_struct = ApplicableTradeTax::default();
-            new_struct.category_code = code;
-            self.applicable_trade_tax = Some(new_struct);
+            self.applicable_trade_tax = Some(ApplicableTradeTax {
+                category_code: code,
+                ..Default::default()
+            });
         }
 
         self
@@ -608,9 +616,10 @@ impl<'invoice_builder> InvoiceBuilder<'invoice_builder> {
         if let Some(applicable_trade_tax) = self.applicable_trade_tax.as_mut() {
             applicable_trade_tax.rate_applicable_percent = Some(amount);
         } else {
-            let mut new_struct = ApplicableTradeTax::default();
-            new_struct.rate_applicable_percent = Some(amount);
-            self.applicable_trade_tax = Some(new_struct);
+            self.applicable_trade_tax = Some(ApplicableTradeTax {
+                rate_applicable_percent: Some(amount),
+                ..Default::default()
+            });
         }
 
         self
@@ -806,7 +815,7 @@ impl<'invoice_builder> InvoiceBuilder<'invoice_builder> {
                     }),
                 },
                 applicable_header_trade_settlement: ApplicableHeaderTradeSettlement {
-                    invoice_currency_code: self.invoice_currency_code.clone().unwrap(),
+                    invoice_currency_code: self.invoice_currency_code.unwrap(),
                     specified_trade_settlement_payment_means: Vec::new(),
                     applicable_trade_tax: self.applicable_trade_tax,
                     specified_trade_allowance_charge: Vec::new(),
@@ -840,7 +849,7 @@ mod test {
             .set_business_process("process1")
             .set_invoice_type_code(InvoiceTypeCode::CommercialInvoice)
             .set_invoice_nr("INV-123456")
-            .set_date_of_issue(chrono::NaiveDate::from_ymd_opt(2024, 08, 10).unwrap())
+            .set_date_of_issue(chrono::NaiveDate::from_ymd_opt(2024, 8, 10).unwrap())
             .set_buyer_reference("BR-7890")
             .set_sellers_name("Seller Corp.")
             // .set_sellers_specified_legal_organization("LegalOrg-001")
