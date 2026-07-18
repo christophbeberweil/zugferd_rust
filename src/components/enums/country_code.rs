@@ -874,7 +874,6 @@ mod tests {
 
         let string_repr = code.as_str().to_owned();
         let parsed_code = CountryCode::try_from(string_repr.as_str()).unwrap();
-        debug_assert_eq!(parsed_code, code);
-        panic!("wtf")
+        assert_eq!(parsed_code, code);
     }
 }
