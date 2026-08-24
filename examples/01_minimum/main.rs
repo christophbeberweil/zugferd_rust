@@ -8,7 +8,7 @@ fn main() {
         .set_business_process("process1")
         .set_invoice_type_code(InvoiceTypeCode::CommercialInvoice)
         .set_invoice_nr("INV-123456")
-        .set_date_of_issue(chrono::NaiveDate::from_ymd_opt(2024, 08, 10).unwrap())
+        .set_date_of_issue(chrono::NaiveDate::from_ymd_opt(2024, 8, 10).unwrap())
         .set_buyer_reference("BR-7890")
         .set_sellers_name("Seller Corp.")
         .set_sellers_specified_legal_organization("LegalOrg-001")

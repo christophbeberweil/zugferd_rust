@@ -31,15 +31,15 @@ where S:Serializer
 {
     if option.is_some() {
         let formatted = format!("{:.2}",option.unwrap());
-        return serializer.serialize_str(&formatted);
+        serializer.serialize_str(&formatted)
     }
     else {
-        return serializer.serialize_none();
+        serializer.serialize_none()
         //return Err(serde::ser::Error::custom("Expected a value, got None"));
     }
 }
 
-fn vector_is_empty <S> (vector: &Vec<S>) -> bool {
+fn vector_is_empty <S> (vector: &[S]) -> bool {
     vector.is_empty()
 }
 
@@ -703,6 +703,7 @@ pub struct DueDateDateTime<'invoice> {
 
 /// `BG-22`: A group of business terms providing the monetary totals for the Invoice.
 #[derive(Serialize, Clone, Debug)]
+#[derive(Default)]
 pub struct SpecifiedTradeSettlementHeaderMonetarySummation {
     /// `BT-106`: Sum of all Invoice line net amounts in the Invoice.
     #[serde(rename="ram:LineTotalAmount", serialize_with="format_f64_option", skip_serializing_if = "Option::is_none")]
@@ -731,19 +732,6 @@ pub struct SpecifiedTradeSettlementHeaderMonetarySummation {
     pub due_payable_amount: Option<f64>,
 }
 
-impl Default for SpecifiedTradeSettlementHeaderMonetarySummation {
-    fn default() -> Self {
-        Self {
-            line_total_amount: None,
-            charge_total_amount: None,
-            allowance_total_amount: None,
-            tax_basis_total_amount: None,
-            tax_total_amount: None,
-            grand_total_amount: None,
-            due_payable_amount: None,
-        }
-    }
-}
 
 #[derive(Serialize, Clone, Debug)]
 pub struct TaxTotalAmount {
@@ -756,8 +744,8 @@ pub struct TaxTotalAmount {
 impl TaxTotalAmount {
     pub fn new(currency_id: CurrencyCode, amount: f64) -> Self {
         TaxTotalAmount {
-            currency_id: currency_id,
-            amount: amount,
+            currency_id,
+            amount,
         }
     }
 }

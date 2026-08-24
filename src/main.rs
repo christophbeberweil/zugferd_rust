@@ -19,7 +19,7 @@ fn main() {
     invoice_builder.set_business_process("process1")
                     .set_invoice_type_code(InvoiceTypeCode::CommercialInvoice)
                     .set_invoice_nr("INV-123456")
-                    .set_date_of_issue(chrono::NaiveDate::from_ymd_opt(2024,08,10).unwrap())
+                    .set_date_of_issue(chrono::NaiveDate::from_ymd_opt(2024,8,10).unwrap())
                     .set_buyer_reference("BR-7890")
                     .set_sellers_name("Seller Corp.")
                     .set_sellers_specified_legal_organization("LegalOrg-001")
@@ -87,7 +87,7 @@ fn main() {
         .set_buyers_postal_trade_address_city_name("Springfield");
 
     invoice_builder
-        .set_occurrence_date(chrono::NaiveDate::from_ymd_opt(2024,07,06).unwrap());
+        .set_occurrence_date(chrono::NaiveDate::from_ymd_opt(2024,7,6).unwrap());
 
     invoice_builder
         .set_applicable_trade_tax_basis_amount(sum_net)

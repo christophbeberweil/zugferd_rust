@@ -9,8 +9,11 @@ pub struct BusinessRuleViolation {
     pub fields: Vec<(String, String)>,
 }
 
+/// A single business-rule check.
+type BusinessRule = fn(&Invoice) -> Result<(), BusinessRuleViolation>;
+
 /// List of business rules to validate
-const BUSINESS_RULES: &[fn(&Invoice) -> Result<(), BusinessRuleViolation>] = &[
+const BUSINESS_RULES: &[BusinessRule] = &[
     // br_01,
     // br_02,
     // br_03,

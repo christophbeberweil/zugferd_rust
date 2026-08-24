@@ -17,8 +17,8 @@ pub fn write_xml_to_file (
     match OpenOptions::new().write(true).create(true).truncate(true).open(path) {
         Ok(mut file) => {
             file.write_all(xml_content.as_bytes()).map_err(|e| e.to_string())?;
-            return Ok(());
+            Ok(())
         },
-        Err(e) => return Err(e.to_string()),
-    };
+        Err(e) => Err(e.to_string()),
+    }
 }
