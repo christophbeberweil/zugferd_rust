@@ -264,9 +264,10 @@ impl<'invoice_builder> InvoiceBuilder<'invoice_builder> {
         }
 
         if specification_level >= SpecificationLevel::Basic
-            && self.included_supply_chain_trade_line_items.is_empty() {
-                error_text += "No included supply chain trade line items set\n";
-            }
+            && self.included_supply_chain_trade_line_items.is_empty()
+        {
+            error_text += "No included supply chain trade line items set\n";
+        }
 
         if specification_level >= SpecificationLevel::Extended {
             if self.buyer_reference.is_none() {
@@ -785,11 +786,11 @@ impl<'invoice_builder> InvoiceBuilder<'invoice_builder> {
                     },
                     buyer_trade_party: BuyerTradeParty {
                         name: self.buyers_name.unwrap(),
-                        specified_legal_organization: self
-                            .sellers_specified_legal_organization
-                            .map(|v| SpecifiedLegalOrganization {
+                        specified_legal_organization: self.buyers_specified_legal_organization.map(
+                            |v| SpecifiedLegalOrganization {
                                 id: LegalOrganizationID::new(v),
-                            }),
+                            },
+                        ),
                         postal_trade_address: PostalTradeAddress {
                             country_id: self.buyers_postal_trade_address.country_id,
                             postcode_code: self.buyers_postal_trade_address.postcode_code,
